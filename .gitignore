@@ -1,0 +1,6 @@
+.idea
+target
+out
+Data
+.swagger-codegen
+.swagger-codegen-ignore
