@@ -6,7 +6,6 @@ import Model.Producer;
 import io.swagger.client.ApiClient;
 
 import java.io.File;
-import java.util.Timer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -81,8 +80,6 @@ public class CliController {
         // ****************** Execution END ******************
 
         // print timer statistics
-        System.out.println(startTime/1000000 + " ms");
-        System.out.println(endTime/1000000 + " ms");
         System.out.println((endTime - startTime)/1000000 + " ms");
 
         if (producer.getDebugLineCounter() == dataBuffer.getTextLineCounter().get()) System.out.println("true");
