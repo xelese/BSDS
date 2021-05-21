@@ -7,6 +7,7 @@ public class DataBuffer {
 
     protected BlockingQueue<String> queue;
     protected AtomicInteger textLineCounter;
+    protected AtomicInteger successCounter;
 
     public DataBuffer(Integer queueSize) throws IllegalArgumentException {
         // validate que size parameter
@@ -16,6 +17,9 @@ public class DataBuffer {
 
         // set textLineCounter to 0
         this.textLineCounter = new AtomicInteger(0);
+
+        // set successCounter to 0
+        this.successCounter = new AtomicInteger(0);
     }
 
     public BlockingQueue<String> getQueue() {
@@ -24,5 +28,9 @@ public class DataBuffer {
 
     public AtomicInteger getTextLineCounter() {
         return textLineCounter;
+    }
+
+    public AtomicInteger getSuccessCounter() {
+        return successCounter;
     }
 }

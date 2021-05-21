@@ -1,12 +1,12 @@
-import io.swagger.client.*;
-import io.swagger.client.auth.*;
-import io.swagger.client.model.*;
-import io.swagger.client.api.TextbodyApi;
-
-
-import java.io.File;
-import java.util.*;
-
+//import io.swagger.client.*;
+//import io.swagger.client.auth.*;
+//import io.swagger.client.model.*;
+//import io.swagger.client.api.TextbodyApi;
+//
+//
+//import java.io.File;
+//import java.util.*;
+//
 //public class TextbodyApiExample {
 //    public static void main(String[] args) {
 //
@@ -17,7 +17,7 @@ import java.util.*;
 //        TextLine body = new TextLine().message("graham norton show"); // TextLine | text string to analyze
 //        String function = "function_example"; // String | the operation to perform on the text
 //        try {
-//            ResultVal result = apiInstance.analyzeNewLine(body, function);
+//            ApiResponse<ResultVal> result = apiInstance.analyzeNewLineWithHttpInfo(body, function);
 //            System.out.println(result);
 //        } catch (ApiException e) {
 //            System.err.println("Exception when calling TextbodyApi#analyzeNewLine");

@@ -31,6 +31,6 @@ public class Client {
 
         // Delegate execution to controller
         CliController controller = new CliController();
-        controller.run(myFile, threadCount, 100);
+        controller.run(myFile, threadCount, 1000);
     }
 }
