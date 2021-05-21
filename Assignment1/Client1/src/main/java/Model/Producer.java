@@ -4,17 +4,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
+
 import General.Commands;
 
 public class Producer implements Runnable {
-    BlockingQueue<String> queue;
-    Integer numberOfConsumerThreads;
-    File file;
+    private BlockingQueue<String> queue;
+    private final Integer numberOfConsumerThreads;
+    private final File file;
+    private Integer debugLineCounter = 0;
 
-    public Producer(File file, BlockingQueue<String> queue, Integer numberOfConsumerThreads) throws IllegalArgumentException {
+    public Producer(File file, DataBuffer dataBuffer, Integer numberOfConsumerThreads) throws IllegalArgumentException {
         // validate queue
-        if (queue == null) throw new IllegalArgumentException("queue cannot be null.");
-        this.queue = queue;
+        if (dataBuffer.getQueue() == null) throw new IllegalArgumentException("queue cannot be null.");
+        this.queue = dataBuffer.getQueue();
 
         // validate threads
         if (numberOfConsumerThreads == null) throw new IllegalArgumentException("threads cannot be null.");
@@ -37,7 +39,10 @@ public class Producer implements Runnable {
                 String textLine = scanner.nextLine();
 
                 // put in blocking queue
-                if (!textLine.isEmpty()) queue.put(textLine);
+                if (!textLine.isEmpty()) {
+                    queue.put(textLine);
+                    debugLineCounter += 1;
+                }
             }
 
             // based on the total number of consumers here send Termination data.
@@ -45,8 +50,13 @@ public class Producer implements Runnable {
                 // Send Termination call
                 queue.put(Commands.TerminationDataSignature.toString());
             }
+
         } catch (FileNotFoundException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public Integer getDebugLineCounter() {
+        return debugLineCounter;
     }
 }

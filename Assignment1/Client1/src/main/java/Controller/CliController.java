@@ -1,6 +1,6 @@
 package Controller;
 
-import Model.Buffer;
+import Model.DataBuffer;
 import Model.Consumer;
 import Model.Producer;
 
@@ -16,7 +16,7 @@ public class CliController {
 
     public void run(File file, Integer threadCount, Integer queueSize) throws IllegalArgumentException {
         // initialize the buffer containing blockingQueue.
-        Buffer buffer = new Buffer(queueSize);
+        DataBuffer dataBuffer = new DataBuffer(queueSize);
 
         // thread name object.
         String internalThreadName;
@@ -26,13 +26,14 @@ public class CliController {
         ExecutorService consumerThreads = Executors.newFixedThreadPool(threadCount);
 
         // run the producer executor.
-        producerThread.submit(new Producer(file, buffer.getQueue(), threadCount));
+        Producer producer = new Producer(file, dataBuffer, threadCount);
+        producerThread.submit(producer);
 
         // run consumer executor pool.
         for (int i = 0; i < threadCount; i++) {
             // name each thread.
             internalThreadName = "Thread " + i;
-            consumerThreads.submit(new Consumer(internalThreadName, buffer.getQueue()));
+            consumerThreads.submit(new Consumer(internalThreadName, dataBuffer));
         }
 
         // terminate all threads
@@ -53,6 +54,9 @@ public class CliController {
             producerThread.shutdownNow();
             consumerThreads.shutdownNow();
         }
+
+        if (producer.getDebugLineCounter() == dataBuffer.getTextLineCounter().get()) System.out.println("true");
+        else System.out.println("false");
 
         // indication for all thread termination
         System.out.println("All threads terminated.");

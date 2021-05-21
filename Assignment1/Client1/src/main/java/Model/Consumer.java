@@ -5,10 +5,13 @@ import General.Commands;
 import java.util.concurrent.BlockingQueue;
 
 public class Consumer implements Runnable {
-    BlockingQueue<String> queue;
-    String threadName;
+    private BlockingQueue<String> queue;
+    private final String threadName;
+    private DataBuffer dataBuffer;
 
-    public Consumer(String threadName, BlockingQueue<String> queue) {
+    public Consumer(String threadName, DataBuffer dataBuffer) {
+        // set the buffer
+        this.dataBuffer = dataBuffer;
 
         // set ThreadName
         if (threadName == null || threadName.isEmpty())
@@ -16,8 +19,8 @@ public class Consumer implements Runnable {
         this.threadName = threadName;
 
         // validate queue
-        if (queue == null) throw new IllegalArgumentException("queue cannot be null.");
-        this.queue = queue;
+        if (dataBuffer.getQueue() == null) throw new IllegalArgumentException("queue cannot be null.");
+        this.queue = dataBuffer.getQueue();
 
         // initializr TextBodyApi class.
     }
@@ -33,8 +36,10 @@ public class Consumer implements Runnable {
                 incomingDataStream = queue.take();
 
                 // print data stream on out.
-                if (!incomingDataStream.equals(Commands.TerminationDataSignature.toString()))
-                    System.out.println(incomingDataStream);
+                if (!incomingDataStream.equals(Commands.TerminationDataSignature.toString())) {
+//                    System.out.println(incomingDataStream);
+                    dataBuffer.textLineCounter.getAndIncrement();
+                }
 
                 // send data to server
                 // try calling the analyzeNewLine(body, function);
