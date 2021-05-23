@@ -3,55 +3,44 @@ package Model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.concurrent.BlockingQueue;
-
-import General.Commands;
 
 public class Producer implements Runnable {
-    private BlockingQueue<String> queue;
-    private final Integer numberOfConsumerThreads;
-    private final File file;
+    private final DataBuffer dataBuffer;
     private Integer debugLineCounter = 0;
+    private final Scanner scanner;
 
-    public Producer(File file, DataBuffer dataBuffer, Integer numberOfConsumerThreads) throws IllegalArgumentException {
-        // validate queue
-        if (dataBuffer.getQueue() == null) throw new IllegalArgumentException("queue cannot be null.");
-        this.queue = dataBuffer.getQueue();
 
-        // validate threads
-        if (numberOfConsumerThreads == null) throw new IllegalArgumentException("threads cannot be null.");
-        if (numberOfConsumerThreads <= 0) throw new IllegalArgumentException("threads must be greater than 0.");
-        this.numberOfConsumerThreads = numberOfConsumerThreads;
+    public Producer(File file, DataBuffer dataBuffer) throws IllegalArgumentException, FileNotFoundException {
+        // data buffer
+        if (dataBuffer == null) throw new IllegalArgumentException("Data buffer cannot be null");
+        this.dataBuffer = dataBuffer;
 
         // validate file
         if (file == null) throw new IllegalArgumentException("file cannot be null.");
-        this.file = file;
+
+        // initialize a scanner to read text.
+        if (!file.exists()) throw new FileNotFoundException("File not found");
+        this.scanner = new Scanner(file);
     }
 
     @Override
     public void run() {
         try {
-            // initialize a scanner to read text.
-            Scanner scanner = new Scanner(file);
-
-            while (scanner.hasNext()) {
+            while (this.scanner.hasNext()) {
                 // read data line by line
-                String textLine = scanner.nextLine();
+                String textLine = this.scanner.nextLine();
 
                 // put in blocking queue
                 if (!textLine.isEmpty()) {
-                    queue.put(textLine);
-                    debugLineCounter += 1;
+                    this.dataBuffer.queue.put(textLine);
+                    this.debugLineCounter += 1;
                 }
             }
 
-            // based on the total number of consumers here send Termination data.
-            for (int i = 0; i < numberOfConsumerThreads; i++) {
-                // Send Termination call
-                queue.put(Commands.TerminationDataSignature.toString());
-            }
+            // decrement the producer count in data buffer class.
+            this.dataBuffer.producerComplete.getAndDecrement();
 
-        } catch (FileNotFoundException | InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

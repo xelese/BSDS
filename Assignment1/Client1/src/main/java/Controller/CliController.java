@@ -1,11 +1,12 @@
 package Controller;
 
+import General.Config;
 import Model.DataBuffer;
 import Model.Consumer;
 import Model.Producer;
 import io.swagger.client.ApiClient;
 
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -15,19 +16,12 @@ public class CliController {
     public CliController() {
     }
 
-    public void run(File file, Integer threadCount, Integer queueSize) throws IllegalArgumentException {
+    public void run(Config config) throws IllegalArgumentException, FileNotFoundException {
         // initialize the buffer containing data blocks.
-        DataBuffer dataBuffer = new DataBuffer(queueSize);
-
-        // initialize Producer
-        Producer producer = new Producer(file, dataBuffer, threadCount);
-
-        // thread name object.
-        String internalThreadName;
+        DataBuffer dataBuffer = new DataBuffer(config.getQueueSize(), config.getProducerThreads());
 
         // base path
-        String basePath = "http://localhost:8080/gortonator/TextProcessor/1.0.2/";
-        ApiClient apiClient = new ApiClient().setBasePath(basePath);
+        ApiClient apiClient = new ApiClient().setBasePath(config.getBaseUrlPath());
 
         // function name
         String function = "function_example"; // String | the operation to perform on the text
@@ -37,22 +31,22 @@ public class CliController {
         long endTime;
 
         // initialize the producer and consumer executorService thread pools
-        ExecutorService producerThread = Executors.newSingleThreadExecutor();
-        ExecutorService consumerThreads = Executors.newFixedThreadPool(threadCount);
+        ExecutorService producerThread = Executors.newFixedThreadPool(config.getProducerThreads());
+        ExecutorService consumerThreads = Executors.newFixedThreadPool(config.getConsumerThreads());
 
         // ****************** Execution START ******************
 
         // Start timer
         startTime = System.nanoTime();
 
-        // run the producer executor.
-        producerThread.submit(producer);
+        // run producer executor pool.
+        for (int i = 0; i < config.getProducerThreads(); i++) {
+            producerThread.submit(new Producer(config.getMyFile(), dataBuffer));
+        }
 
         // run consumer executor pool.
-        for (int i = 0; i < threadCount; i++) {
-            // name each thread.
-            internalThreadName = "Thread " + i;
-            consumerThreads.submit(new Consumer(internalThreadName, dataBuffer, apiClient, function));
+        for (int i = 0; i < config.getConsumerThreads(); i++) {
+            consumerThreads.submit(new Consumer(dataBuffer, apiClient, function));
         }
 
         // terminate all threads
@@ -61,11 +55,11 @@ public class CliController {
 
         try {
             // Force shutdown producer threads.
-            if (!producerThread.awaitTermination(1, TimeUnit.MINUTES)) {
+            if (!producerThread.awaitTermination(10, TimeUnit.MINUTES)) {
                 producerThread.shutdownNow();
             }
             // Force shutdown consumer threads.
-            if (!consumerThreads.awaitTermination(1, TimeUnit.MINUTES)) {
+            if (!consumerThreads.awaitTermination(10, TimeUnit.MINUTES)) {
                 consumerThreads.shutdownNow();
             }
         } catch (InterruptedException e) {
@@ -77,17 +71,19 @@ public class CliController {
         // end timer
         endTime = System.nanoTime();
 
-        // ****************** Execution END ******************
-
-        // print timer statistics
-        System.out.println((endTime - startTime)/1000000 + " ms");
-
-        if (producer.getDebugLineCounter() == dataBuffer.getTextLineCounter().get()) System.out.println("true");
-        else System.out.println("false");
-
-        System.out.println("Successful messages: " + dataBuffer.getSuccessCounter());
-
         // indication for all thread termination
         System.out.println("All threads terminated.");
+
+        // ****************** Execution END ******************
+        float wallTime = ((float) (endTime - startTime) / 1000000000.f);
+        float throughput = dataBuffer.getSuccessCounter().floatValue() / wallTime;
+
+        System.out.println("---------------------------------------------------");
+        System.out.println("--------------------- STATS -----------------------");
+        System.out.println("1. total number of successful requests sent: " + dataBuffer.getSuccessCounter());
+        System.out.println("2. total number of unsuccessful requests sent: " + dataBuffer.getFailCounter());
+        System.out.println("3. wall time: " + wallTime + " ms");
+        System.out.println("4. Throughput: " + throughput);
+        System.out.println("---------------------------------------------------");
     }
 }
