@@ -45,7 +45,7 @@ public class Consumer implements Runnable {
         ApiResponse<ResultVal> result;
 
         try {
-            while (this.dataBuffer.producerComplete.get() != 0) {
+            while (this.dataBuffer.producerComplete.get() > 0 || this.dataBuffer.getQueue().size() > 0) {
                 // get data from queue
                 incomingDataStream = queue.take();
 
@@ -55,21 +55,20 @@ public class Consumer implements Runnable {
                 this.body.setMessage(incomingDataStream);
 
                 // debug counter
-//                    dataBuffer.textLineCounter.getAndIncrement();
+                dataBuffer.textLineCounter.getAndIncrement();
 
                 // send data to server
                 result = apiInstance.analyzeNewLineWithHttpInfo(body, function);
 
                 // check the status code
-
-                if (result.getStatusCode() == 200) {
+                if (result.getStatusCode() >= 200 && result.getStatusCode() < 300) {
                     // 200 increment counter
                     dataBuffer.successCounter.getAndIncrement();
                 } else {
+                    dataBuffer.failCounter.getAndIncrement();
                     // 400 write to a text file for logging.
                     System.err.println("message: " + result.getData().getMessage() +
                             "| status: " + result.getStatusCode() + "|");
-                    dataBuffer.failCounter.getAndIncrement();
                     System.out.println(result.getData().getMessage());
                 }
             }

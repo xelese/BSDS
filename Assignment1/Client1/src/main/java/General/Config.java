@@ -35,7 +35,10 @@ public final class Config {
         this.queueSize = 1000;
 
         // initialize URL
-        this.baseUrlPath = "http://localhost:8080/gortonator/TextProcessor/1.0.2/";
+//        this.baseUrlPath = "http://localhost:8080/Server_war/";
+
+        // remote url
+        this.baseUrlPath = "http://54.91.254.218:8080/Server_war/";
     }
 
     public File getMyFile() {

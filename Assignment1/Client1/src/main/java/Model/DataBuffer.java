@@ -41,4 +41,8 @@ public class DataBuffer {
     public AtomicInteger getFailCounter() {
         return failCounter;
     }
+
+    public AtomicInteger getTextLineCounter() {
+        return textLineCounter;
+    }
 }

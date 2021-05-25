@@ -78,12 +78,15 @@ public class CliController {
         float wallTime = ((float) (endTime - startTime) / 1000000000.f);
         float throughput = dataBuffer.getSuccessCounter().floatValue() / wallTime;
 
-        System.out.println("---------------------------------------------------");
-        System.out.println("--------------------- STATS -----------------------");
+        System.out.println("------------------ CONFIG --------------------------");
+        System.out.println("Total number of producer Threads: " + config.getProducerThreads());
+        System.out.println("Total number of consumer Threads: " + config.getConsumerThreads());
+        System.out.println("Total number of client requests consumed: " + dataBuffer.getTextLineCounter());
+        System.out.println("------------------ OVERALL STATS -------------------");
         System.out.println("1. total number of successful requests sent: " + dataBuffer.getSuccessCounter());
         System.out.println("2. total number of unsuccessful requests sent: " + dataBuffer.getFailCounter());
-        System.out.println("3. wall time: " + wallTime + " ms");
-        System.out.println("4. Throughput: " + throughput);
+        System.out.println("3. wall time: " + wallTime + " s");
+        System.out.println("4. Throughput: " + throughput + " req/s");
         System.out.println("---------------------------------------------------");
     }
 }

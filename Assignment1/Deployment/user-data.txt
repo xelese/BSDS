@@ -1,0 +1,21 @@
+# install tomcat
+sudo -s
+yum install java-1.8.0-openjdk.x86_64 -y
+cd /opt
+wget https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.35/bin/apache-tomcat-8.5.35.tar.gz
+tar -xzvf /opt/apache-tomcat-8.5.35.tar.gz
+cd apache-tomcat-8.5.35/bin
+chmod +x startup.sh shutdown.sh
+./startup.sh
+cd
+cd /opt/apache-tomcat-8.5.35/
+sudo chmod -R 777 webapps/
+
+
+# tomcat webapp path
+
+ssh -i "rv-ec2-instance.pem" ec2-user@ec2-3-88-13-78.compute-1.amazonaws.com
+
+scp -i "rv-ec2-instance.pem" E:\Intellij\BSDS\Assignment1\Server\out\artifacts\Server_war\Server_war.war  ec2-user@ec2-3-88-13-78.compute-1.amazonaws.com:/opt/apache-tomcat-8.5.35/webapps/
+
+scp -i "rv-ec2-instance.pem" E:\Intellij\BSDS\Lab2\out\artifacts\Lab2_war\Lab2_war.war ec2-user@ec2-3-88-13-78.compute-1.amazonaws.com:/opt/apache-tomcat-8.5.35/webapps/

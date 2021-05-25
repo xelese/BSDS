@@ -4,3 +4,4 @@ out
 Data
 .swagger-codegen
 .swagger-codegen-ignore
+Deployment/rv-ec2-instance.pem
