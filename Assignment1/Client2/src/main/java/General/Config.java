@@ -15,7 +15,7 @@ public final class Config {
     public Config(String filePath, Integer consumerThreads, Integer producerThreads) throws FileNotFoundException {
 
         // validate file path.
-        if (filePath.isEmpty() || filePath == null)
+        if (filePath.isEmpty())
             throw new IllegalArgumentException("File path cannot be empty or null");
         File myFile = new File(filePath);
         if (!myFile.exists()) throw new FileNotFoundException("file " + filePath + " not found!");
