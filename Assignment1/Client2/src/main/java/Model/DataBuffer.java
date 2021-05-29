@@ -1,11 +1,15 @@
 package Model;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DataBuffer {
 
     protected BlockingQueue<String> queue;
+    protected List<LoggingData> loggingDataList;
     protected AtomicInteger textLineCounter;
     protected AtomicInteger successCounter;
     protected AtomicInteger failCounter;
@@ -28,6 +32,9 @@ public class DataBuffer {
 
         // set total producers
         this.producerComplete = new AtomicInteger(producerCount);
+
+        // initialize logging data
+        loggingDataList = Collections.synchronizedList(new ArrayList<>());
     }
 
     public BlockingQueue<String> getQueue() {
@@ -44,5 +51,13 @@ public class DataBuffer {
 
     public AtomicInteger getTextLineCounter() {
         return textLineCounter;
+    }
+
+    public List<LoggingData> getLoggingDataList() {
+        return loggingDataList;
+    }
+
+    public AtomicInteger getProducerComplete() {
+        return producerComplete;
     }
 }

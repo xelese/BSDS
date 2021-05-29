@@ -1,12 +1,14 @@
 package Controller;
 
 import General.Config;
+import General.CustomLogger;
 import Model.DataBuffer;
 import Model.Consumer;
 import Model.Producer;
 import io.swagger.client.ApiClient;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -22,6 +24,9 @@ public class CliController {
 
         // base path
         ApiClient apiClient = new ApiClient().setBasePath(config.getBaseUrlPath());
+
+        // initialize Utils class.
+        CustomLogger customLogger = new CustomLogger(dataBuffer, config);
 
         // function name
         String function = "function_example"; // String | the operation to perform on the text
@@ -74,19 +79,16 @@ public class CliController {
         // indication for all thread termination
         System.out.println("All threads terminated.");
 
+        // write log data
+        try {
+            customLogger.writeLogData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         // ****************** Execution END ******************
         float wallTime = ((float) (endTime - startTime) / 1000000000.f);
-        float throughput = dataBuffer.getSuccessCounter().floatValue() / wallTime;
 
-        System.out.println("------------------ CONFIG --------------------------");
-        System.out.println("Total number of producer Threads: " + config.getProducerThreads());
-        System.out.println("Total number of consumer Threads: " + config.getConsumerThreads());
-        System.out.println("Total number of client requests consumed: " + dataBuffer.getTextLineCounter());
-        System.out.println("------------------ OVERALL STATS -------------------");
-        System.out.println("1. total number of successful requests sent: " + dataBuffer.getSuccessCounter());
-        System.out.println("2. total number of unsuccessful requests sent: " + dataBuffer.getFailCounter());
-        System.out.println("3. wall time: " + wallTime + " s");
-        System.out.println("4. Throughput: " + throughput + " req/s");
-        System.out.println("---------------------------------------------------");
+        customLogger.CalculateResponse(wallTime);
     }
 }

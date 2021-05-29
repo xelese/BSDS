@@ -7,6 +7,8 @@ import io.swagger.client.api.TextbodyApi;
 import io.swagger.client.model.ResultVal;
 import io.swagger.client.model.TextLine;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 
 public class Consumer implements Runnable {
@@ -44,6 +46,11 @@ public class Consumer implements Runnable {
 
         ApiResponse<ResultVal> result;
 
+        long startTime;
+        long endTime;
+        long latency;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date;
         try {
             while (this.dataBuffer.producerComplete.get() > 0 || this.dataBuffer.getQueue().size() > 0) {
                 // get data from queue
@@ -58,7 +65,11 @@ public class Consumer implements Runnable {
                 dataBuffer.textLineCounter.getAndIncrement();
 
                 // send data to server
+                startTime = System.nanoTime();
+                date = new Date();
                 result = apiInstance.analyzeNewLineWithHttpInfo(body, function);
+                endTime = System.nanoTime();
+                latency = (endTime - startTime);
 
                 // check the status code
                 if (result.getStatusCode() >= 200 && result.getStatusCode() < 300) {
@@ -71,6 +82,9 @@ public class Consumer implements Runnable {
                             "| status: " + result.getStatusCode() + "|");
                     System.out.println(result.getData().getMessage());
                 }
+
+                // add logging data to the array.
+                dataBuffer.loggingDataList.add(new LoggingData(dateFormat.format(date), "POST", (int) (latency / 1000000), result.getStatusCode()));
             }
 
         } catch (InterruptedException | ApiException e) {
