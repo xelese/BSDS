@@ -1,0 +1,109 @@
+@startuml
+
+title __CLIENT PART II__\n
+
+    class Client {
+            {static} + main()
+        }
+
+    namespace Controller {
+      class Controller.CliController {
+        + CliController()
+        + run()
+      }
+    }
+
+    namespace General {
+      class General.Config {
+        - baseUrlPath : String
+        - consumerThreads : Integer
+        - logFile : File
+        - inputFile : File
+        - producerThreads : Integer
+        - queueSize : Integer
+        + Config()
+        + getBaseUrlPath()
+        + getConsumerThreads()
+        + getLogFile()
+        + getMyFile()
+        + getProducerThreads()
+        + getQueueSize()
+      }
+    }
+
+    namespace General {
+      class General.CustomLogger {
+        + CalculateResponse()
+        + CustomLogger()
+        + writeLogData()
+      }
+    }
+
+    namespace Model {
+      class Model.Consumer {
+        - apiInstance : TextbodyApi
+        - body : TextLine
+        - function : String
+        - queue : BlockingQueue<String>
+        + Consumer()
+        + run()
+      }
+    }
+
+    namespace Model {
+      class Model.DataBuffer {
+        # failCounter : AtomicInteger
+        # loggingDataList : List<LoggingData>
+        # producerComplete : AtomicInteger
+        # queue : BlockingQueue<String>
+        # successCounter : AtomicInteger
+        # textLineCounter : AtomicInteger
+        + DataBuffer()
+        + getFailCounter()
+        + getLoggingDataList()
+        + getProducerComplete()
+        + getQueue()
+        + getSuccessCounter()
+        + getTextLineCounter()
+      }
+    }
+
+    namespace Model {
+      class Model.LoggingData {
+        - latency : Integer
+        - requestType : String
+        - responseCode : Integer
+        - startTime : String
+        + LoggingData()
+        + compareTo()
+        + getLatency()
+        + getRequestType()
+        + getResponseCode()
+        + getStartTime()
+      }
+    }
+
+    namespace Model {
+      class Model.Producer {
+        - debugLineCounter : Integer
+        - scanner : Scanner
+        + Producer()
+        + getDebugLineCounter()
+        + run()
+      }
+    }
+
+  General.CustomLogger o-- General.Config : config
+  General.CustomLogger o-- Model.DataBuffer : dataBuffer
+  Model.Consumer .up.|> java.lang.Runnable
+  Model.Consumer o-- Model.DataBuffer : dataBuffer
+  Model.LoggingData .up.|> java.lang.Comparable
+  Model.Producer .up.|> java.lang.Runnable
+  Model.Producer o-- Model.DataBuffer : dataBuffer
+
+
+right footer
+
+endfooter
+
+@enduml

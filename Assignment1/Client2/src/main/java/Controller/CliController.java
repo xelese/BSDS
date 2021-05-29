@@ -46,7 +46,7 @@ public class CliController {
 
         // run producer executor pool.
         for (int i = 0; i < config.getProducerThreads(); i++) {
-            producerThread.submit(new Producer(config.getMyFile(), dataBuffer));
+            producerThread.submit(new Producer(config.getInputFile(), dataBuffer));
         }
 
         // run consumer executor pool.

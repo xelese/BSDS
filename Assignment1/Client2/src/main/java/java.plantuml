@@ -1,0 +1,13 @@
+@startuml
+
+title __JAVA's Class Diagram__\n
+
+    class Client {
+        {static} + main()
+    }
+
+right footer
+
+endfooter
+
+@enduml

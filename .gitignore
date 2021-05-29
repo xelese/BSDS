@@ -1,6 +1,6 @@
 *.iml
 .idea
-Assignment1/*.plantuml
+*.plantuml
 target
 out
 Data

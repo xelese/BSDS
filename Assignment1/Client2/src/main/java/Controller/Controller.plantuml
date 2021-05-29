@@ -1,0 +1,16 @@
+@startuml
+
+title __CONTROLLER's Class Diagram__\n
+
+    namespace Controller {
+      class Controller.CliController {
+          + CliController()
+          + run()
+      }
+    }
+
+right footer
+
+endfooter
+
+@enduml

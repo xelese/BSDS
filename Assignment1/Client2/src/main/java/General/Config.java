@@ -5,11 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.SimpleTimeZone;
 
 public final class Config {
 
-    private final File myFile;
+    private final File inputFile;
     private final Integer consumerThreads;
     private final Integer producerThreads;
     private final Integer queueSize;
@@ -25,7 +24,7 @@ public final class Config {
             throw new IllegalArgumentException("File path cannot be empty or null");
         File myFile = new File(filePath);
         if (!myFile.exists()) throw new FileNotFoundException("file " + filePath + " not found!");
-        this.myFile = myFile;
+        this.inputFile = myFile;
 
         // validate consumer thread count
         if (consumerThreads == null) throw new IllegalArgumentException("number of threads cannot be null");
@@ -60,8 +59,8 @@ public final class Config {
         this.baseUrlPath = "http://54.221.140.158:8080/Server_war/";
     }
 
-    public File getMyFile() {
-        return myFile;
+    public File getInputFile() {
+        return inputFile;
     }
 
     public Integer getConsumerThreads() {

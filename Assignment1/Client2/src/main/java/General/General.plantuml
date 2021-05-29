@@ -1,0 +1,38 @@
+@startuml
+
+title __GENERAL's Class Diagram__\n
+
+    namespace General {
+      class General.Config {
+          - baseUrlPath : String
+          - consumerThreads : Integer
+          - logFile : File
+          - inputFile : File
+          - producerThreads : Integer
+          - queueSize : Integer
+          + Config()
+          + getBaseUrlPath()
+          + getConsumerThreads()
+          + getLogFile()
+          + getMyFile()
+          + getProducerThreads()
+          + getQueueSize()
+      }
+    }
+
+    namespace General {
+      class General.CustomLogger {
+          + CalculateResponse()
+          + CustomLogger()
+          + writeLogData()
+      }
+    }
+
+  General.CustomLogger o-- General.Config : config
+  General.CustomLogger o-- Model.DataBuffer : dataBuffer
+
+right footer
+
+endfooter
+
+@enduml
