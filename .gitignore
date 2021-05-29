@@ -1,6 +1,6 @@
-**.iml
+[*].iml
 .idea
-**.plantuml
+[*].plantuml
 target
 out
 Data
