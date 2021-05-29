@@ -1,4 +1,6 @@
+*.iml
 .idea
+*.plantuml
 target
 out
 Data
@@ -6,4 +8,3 @@ Data
 .swagger-codegen-ignore
 Assignment1/Deployment/rv-ec2-instance.pem
 Assignment1/Client2/log
-*.plantuml
