@@ -1,5 +1,7 @@
 package Model;
 
+import General.Config;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -8,9 +10,10 @@ public class Producer implements Runnable {
     private final DataBuffer dataBuffer;
     private Integer debugLineCounter = 0;
     private final Scanner scanner;
+    private final Config config;
 
 
-    public Producer(File file, DataBuffer dataBuffer) throws IllegalArgumentException, FileNotFoundException {
+    public Producer(File file, DataBuffer dataBuffer, Config config) throws IllegalArgumentException, FileNotFoundException {
         // data buffer
         if (dataBuffer == null) throw new IllegalArgumentException("Data buffer cannot be null");
         this.dataBuffer = dataBuffer;
@@ -21,6 +24,8 @@ public class Producer implements Runnable {
         // initialize a scanner to read text.
         if (!file.exists()) throw new FileNotFoundException("File not found");
         this.scanner = new Scanner(file);
+
+        this.config = config;
     }
 
     @Override
@@ -39,6 +44,11 @@ public class Producer implements Runnable {
 
             // decrement the producer count in data buffer class.
             this.dataBuffer.producerComplete.getAndDecrement();
+
+            for (int i = 0; i < this.config.getConsumerThreads(); i++) {
+                this.dataBuffer.queue.put("TERMINATEALLTHEADSCOMMAND)(*&^*^&$%&^%$^%$#^%$#^%$#&^*%*&^%&*^%$%^#%T$HSGDVBCSNBVCDFN");
+                this.debugLineCounter += 1;
+            }
 
         } catch (InterruptedException e) {
             e.printStackTrace();

@@ -8,6 +8,7 @@ import Model.Producer;
 import io.swagger.client.ApiClient;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -45,7 +46,7 @@ public class CliController {
 
         // run producer executor pool.
         for (int i = 0; i < config.getProducerThreads(); i++) {
-            producerThread.submit(new Producer(config.getInputFile(), dataBuffer));
+            producerThread.submit(new Producer(config.getInputFile(), dataBuffer, config));
         }
 
         // run consumer executor pool.
@@ -57,15 +58,13 @@ public class CliController {
         producerThread.shutdown();
         consumerThreads.shutdown();
 
-        
-
         try {
             // Force shutdown producer threads.
-            if (!producerThread.awaitTermination(10, TimeUnit.MINUTES)) {
+            if (!producerThread.awaitTermination(120, TimeUnit.SECONDS)) {
                 producerThread.shutdownNow();
             }
             // Force shutdown consumer threads.
-            if (!consumerThreads.awaitTermination(10, TimeUnit.MINUTES)) {
+            if (!consumerThreads.awaitTermination(120, TimeUnit.SECONDS)) {
                 consumerThreads.shutdownNow();
             }
         } catch (InterruptedException e) {
@@ -80,12 +79,12 @@ public class CliController {
         // end timer
         endTime = System.nanoTime();
 
-        // write log data
-//        try {
-//            customLogger.writeLogData();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        //write log data
+        try {
+            customLogger.writeLogData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         // ****************** Execution END ******************
         float wallTime = ((float) (endTime - startTime) / 1000000000.f);

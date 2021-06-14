@@ -53,10 +53,9 @@ public final class Config {
         }
 
         // initialize URL
-        this.baseUrlPath = "http://3.84.206.191:8080/Server_war/";
+//        this.baseUrlPath = "http://3.80.80.231:8080/Server_war/";
 
-        // remote url
-//        this.baseUrlPath = "http://54.221.140.158:8080/Server_war/";
+        this.baseUrlPath = "http://serverbsdsdistributed1-env.eba-fufg5dxy.us-east-1.elasticbeanstalk.com/";
     }
 
     public File getInputFile() {
