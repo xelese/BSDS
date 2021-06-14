@@ -6,5 +6,5 @@ out
 Data
 .swagger-codegen
 .swagger-codegen-ignore
-Assignment1/Deployment/rv-ec2-instance.pem
+Deployment/rv-ec2-instance.pem
 Assignment1/Client2/log

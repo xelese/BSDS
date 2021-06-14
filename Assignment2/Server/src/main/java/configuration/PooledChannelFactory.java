@@ -18,7 +18,7 @@ public class PooledChannelFactory extends BasePooledObjectFactory<Channel> {
     @Override
     public Channel create() throws Exception {
         Channel channel = configuration.getConn().createChannel();
-        channel.exchangeDeclare("TestRabbitMQExchange", "direct", true);
+        channel.exchangeDeclare("TestRabbitMQExchange", "fanout");
         channel.queueDeclare("TestRabbitMQ", true, false, false, null);
         channel.queueBind("TestRabbitMQ","TestRabbitMQExchange","");
         return channel;

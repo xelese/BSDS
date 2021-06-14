@@ -53,7 +53,7 @@ public final class Config {
         }
 
         // initialize URL
-        this.baseUrlPath = "http://localhost:8080/Server_war_exploded/";
+        this.baseUrlPath = "http://3.84.206.191:8080/Server_war/";
 
         // remote url
 //        this.baseUrlPath = "http://54.221.140.158:8080/Server_war/";

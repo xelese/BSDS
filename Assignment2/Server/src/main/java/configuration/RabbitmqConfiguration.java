@@ -21,7 +21,7 @@ public class RabbitmqConfiguration {
 
     private void createConnection() {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost("localhost");
+        connectionFactory.setHost("3.225.35.105");
         connectionFactory.setRequestedChannelMax(1000);
         try {
             conn = connectionFactory.newConnection();
