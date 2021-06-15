@@ -69,12 +69,9 @@ public class TextBodyServlet extends HttpServlet {
                 try {
                     intResponseComposer(response, HttpServletResponse.SC_OK, map.size());
                     if (map.size() > 0) {
-//                        for (String s : map.keySet()) {
                         Channel c = pooledChannel.getPool().borrowObject();
-//                            c.basicPublish("", "TestRabbitMQ", null, ("{" + s + ":" + map.get(s) + "}").getBytes());
-                        c.basicPublish("", "TestRabbitMQ", null, consumerString(map).getBytes());
+                        c.basicPublish("", "TestRabbitMQ", null, map.toString().getBytes());
                         pooledChannel.getPool().returnObject(c);
-//                        }
                     }
                 } catch (Exception e) {
                     intResponseComposer(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, 0);
@@ -108,14 +105,5 @@ public class TextBodyServlet extends HttpServlet {
                 map.put(s, map.getOrDefault(s, 0) + 1);
         }
         return map;
-    }
-
-    private String consumerString(Map<String, Integer> map) {
-        StringBuilder stringBuilder = new StringBuilder("{");
-        for (String s : map.keySet()) {
-            stringBuilder.append(s).append(":").append(map.get(s)).append(", ");
-        }
-        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length()).append("}");
-        return stringBuilder.toString();
     }
 }

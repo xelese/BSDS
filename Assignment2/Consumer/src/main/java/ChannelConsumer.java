@@ -44,7 +44,7 @@ public class ChannelConsumer implements Runnable {
         if (message.isEmpty()) return;
         String[] pairs = message.substring(1, message.length() - 1).split(",");
         for (String pair : pairs) {
-            int index = pair.lastIndexOf(":");
+            int index = pair.lastIndexOf("=");
             String key = pair.substring(0, index);
             Integer val = Integer.parseInt(pair.substring(index + 1));
             this.data.getMap().put(key, this.data.getMap().getOrDefault(key, 0) + val);
