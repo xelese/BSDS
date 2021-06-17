@@ -60,11 +60,11 @@ public class CliController {
 
         try {
             // Force shutdown producer threads.
-            if (!producerThread.awaitTermination(120, TimeUnit.SECONDS)) {
+            if (!producerThread.awaitTermination(10, TimeUnit.MINUTES)) {
                 producerThread.shutdownNow();
             }
             // Force shutdown consumer threads.
-            if (!consumerThreads.awaitTermination(120, TimeUnit.SECONDS)) {
+            if (!consumerThreads.awaitTermination(10, TimeUnit.MINUTES)) {
                 consumerThreads.shutdownNow();
             }
         } catch (InterruptedException e) {

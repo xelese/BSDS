@@ -45,10 +45,10 @@ public class Producer implements Runnable {
             // decrement the producer count in data buffer class.
             this.dataBuffer.producerComplete.getAndDecrement();
 
-            for (int i = 0; i < this.config.getConsumerThreads(); i++) {
-                this.dataBuffer.queue.put("TERMINATEALLTHEADSCOMMAND)(*&^*^&$%&^%$^%$#^%$#^%$#&^*%*&^%&*^%$%^#%T$HSGDVBCSNBVCDFN");
-                this.debugLineCounter += 1;
-            }
+//            for (int i = 0; i < this.config.getConsumerThreads(); i++) {
+//                this.dataBuffer.queue.put("TERMINATEALLTHEADSCOMMAND)(*&^*^&$%&^%$^%$#^%$#^%$#&^*%*&^%&*^%$%^#%T$HSGDVBCSNBVCDFN");
+//                this.debugLineCounter += 1;
+//            }
 
         } catch (InterruptedException e) {
             e.printStackTrace();

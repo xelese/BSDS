@@ -55,9 +55,9 @@ public class Consumer implements Runnable {
             while (this.dataBuffer.producerComplete.get() > 0 || this.dataBuffer.getQueue().size() > 0) {
                 // get data from queue
                 incomingDataStream = queue.take();
-                if (incomingDataStream.equals("TERMINATEALLTHEADSCOMMAND)(*&^*^&$%&^%$^%$#^%$#^%$#&^*%*&^%&*^%$%^#%T$HSGDVBCSNBVCDFN")) {
-                    break;
-                }
+//                if (incomingDataStream.equals("TERMINATEALLTHEADSCOMMAND)(*&^*^&$%&^%$^%$#^%$#^%$#&^*%*&^%&*^%$%^#%T$HSGDVBCSNBVCDFN")) {
+//                    break;
+//                }
 
                 // print data stream on out.
 
