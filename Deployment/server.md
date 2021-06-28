@@ -22,3 +22,8 @@ scp -i "rv-ec2-instance.pem" E:\Intellij\BSDS\Assignment1\Server\out\artifacts\S
 ```shell script
 scp -i "rv-ec2-instance.pem" E:\Intellij\BSDS\Assignment2\Server\out\artifacts\Server_war\Server_war.war ec2-user@ec2-3-84-206-191.compute-1.amazonaws.com:/opt/apache-tomcat-8.5.35/webapps/
 ```
+
+## A3
+```shell script
+scp -i "rv-ec2-instance.pem" E:\Intellij\BSDS\Assignment3\Server\out\artifacts\Server_war\Server_war.war  ec2-user@ec2-50-19-42-157.compute-1.amazonaws.com:/opt/apache-tomcat-8.5.35/webapps/
+```
